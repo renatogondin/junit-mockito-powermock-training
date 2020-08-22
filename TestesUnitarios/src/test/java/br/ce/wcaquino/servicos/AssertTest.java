@@ -4,13 +4,18 @@ import static org.junit.Assert.assertThat;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ErrorCollector;
 
 import br.ce.wcaquino.entidades.Usuario;
 
 
 
 public class AssertTest {
+	
+	@Rule
+	public ErrorCollector error = new ErrorCollector();
 
 	@Test
 	public void testar() {
