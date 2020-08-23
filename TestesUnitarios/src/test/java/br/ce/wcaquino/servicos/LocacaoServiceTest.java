@@ -8,7 +8,9 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -46,12 +48,16 @@ public class LocacaoServiceTest {
 		//cenario
 		Usuario usuario = new Usuario("Usuario 1");
 		Filme filme = new Filme("Filme 1", 1, 5.0);
+		Filme filme2 = new Filme("Filme 2", 1, 6.0);
+		List<Filme> filmes = new ArrayList<Filme>();
+		filmes.add(filme);
+		filmes.add(filme2);
 		
 		//acao
-		Locacao locacao = service.alugarFilme(usuario, filme);
+		Locacao locacao = service.alugarFilme(usuario, filmes);
 			
 		//verificacao
-		error.checkThat(locacao.getValor(), is(equalTo(5.0)));
+		error.checkThat(locacao.getValor(), is(equalTo(11.0)));
 		error.checkThat(isMesmaData(locacao.getDataLocacao(), new Date()), is(true));
 		error.checkThat(isMesmaData(locacao.getDataRetorno(), obterDataComDiferencaDias(1)), is(true));
 	}
@@ -60,20 +66,26 @@ public class LocacaoServiceTest {
 	public void testLocacao_filmeSemEstoque() throws Exception{
 		//cenario
 		Usuario usuario = new Usuario("Usuario 1");
-		Filme filme = new Filme("Filme 2", 0, 4.0);
-		
+		Filme filme = new Filme("Filme 1", 0, 4.0);
+		Filme filme2 = new Filme("Filme 2", 1, 6.0);
+		List<Filme> filmes = new ArrayList<Filme>();
+		filmes.add(filme);
+		filmes.add(filme2);
 		//acao
-		service.alugarFilme(usuario, filme);
+		service.alugarFilme(usuario, filmes);
 	}
 	
 	@Test
 	public void testLocacao_usuarioVazio() throws FilmeSemEstoqueException{
 		//cenario
 		Filme filme = new Filme("Filme 2", 1, 4.0);
-		
+		Filme filme2 = new Filme("Filme 2", 1, 6.0);
+		List<Filme> filmes = new ArrayList<Filme>();
+		filmes.add(filme);
+		filmes.add(filme2);
 		//acao
 		try {
-			service.alugarFilme(null, filme);
+			service.alugarFilme(null, filmes);
 			Assert.fail();
 		} catch (LocadoraException e) {
 			assertThat(e.getMessage(), is("Usuario vazio"));
@@ -87,7 +99,7 @@ public class LocacaoServiceTest {
 		Usuario usuario = new Usuario("Usuario 1");
 		
 		exception.expect(LocadoraException.class);
-		exception.expectMessage("Filme vazio");
+		exception.expectMessage("Não há filmes registrados");
 		
 		//acao
 		service.alugarFilme(usuario, null);
