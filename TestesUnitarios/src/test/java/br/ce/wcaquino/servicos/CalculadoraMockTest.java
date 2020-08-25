@@ -1,5 +1,6 @@
 package br.ce.wcaquino.servicos;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -13,6 +14,6 @@ public class CalculadoraMockTest {
 		
 		
 		
-		System.out.println(calc.soma(1, 100000));
+		Assert.assertEquals(5, calc.soma(1, 100000));
 	}
 }
